@@ -2,11 +2,16 @@
 
 function _notAllowed(req, res) { res.send(new Response.MethodNotAllowed()); }
 
+let _noCache = {
+  'Cache-Control' : 'no-cache, no-store, must-revalidate',
+  'Pragma'        : 'no-cache',
+  'Expires'       : 0
+};
+
 module.exports = function (api) {
   api.get ('/', _notAllowed);
   
   api.post('/', function (req, res, next) {
-    
     Promise.try(function () {
       req.body = _.pick(req.body, _.negate(_.isEmpty));
 
@@ -18,7 +23,7 @@ module.exports = function (api) {
         prec      : 'numeric'
       });
     }).then(function () {
-      res.send(new Response.OK({ id: '0', lat: 44.452714, long: 26.085903, size: 250 }));
+      res.send(new Response.OK({ id: '0', lat: 44.452714, long: 26.085903, size: 250 }, 200, _noCache));
     }).catch(valid.Error, function (e) {
       throw new Response.BadRequest(_.values(_.values(e.errors)[0])[0][0]);
     }).catch(function (err) {
