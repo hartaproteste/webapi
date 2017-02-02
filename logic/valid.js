@@ -47,12 +47,12 @@ Validator.register('domain', function (value) {
   });
 }, 'The :attribute is not valid.');
 
-Validator.Error = function _error() {
+Validator.Error = function () {
   this.prototype.constructor.apply(this, Array.slice.apply(arguments));
 };
 
 Validator.Error.prototype   = new Error('Validation failed');
-Validator.Error.constructor = _error;
+Validator.Error.constructor = Validator.Error;
 
 module.exports = function (data, rules, context, errorClass) {
   errorClass = errorClass || Validator.Error;
