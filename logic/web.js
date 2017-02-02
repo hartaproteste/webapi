@@ -24,7 +24,7 @@ module.exports = function (api) {
 
       throw new Response.BadRequest(_.values(_.values(e.errors)[0])[0][0]);
     }).catch(function (err) {
-      next(e);
+      next(err);
     }).done();
   });
 };
