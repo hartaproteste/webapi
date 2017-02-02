@@ -1,6 +1,11 @@
 ﻿{
   "debug" : false,
 
+  "listen": {
+    "ip"   : "0.0.0.0",
+    "port" : 1989
+  },
+
   "pg": {
     "min" : 4,
     "max" : 20,
