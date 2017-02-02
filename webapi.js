@@ -13,8 +13,6 @@ if (config.debug) {
   Promise.longStackTraces();
 }
 
-console.log(process.env.PGHOST);
-
 var api = require('express')();
 
 api.use(require('./logic/response'));
