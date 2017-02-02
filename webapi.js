@@ -44,6 +44,6 @@ require('http').createServer(api).listen(config.listen.port, config.listen.ip, f
 
     process.exit(-2);
   } else {
-    console.log(new Date().toISOString(), 'INFO', 'Started on ' + config.listen.public.ip + ':' + config.listen.public.port);
+    console.log(new Date().toISOString(), 'INFO', 'Started on ' + config.listen.ip + ':' + config.listen.port);
   }
 });
