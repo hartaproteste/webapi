@@ -47,8 +47,8 @@ Validator.register('domain', function (value) {
   });
 }, 'The :attribute is not valid.');
 
-Validator.Error = function () {
-  this.constructor.prototype.constructor.apply(this, Array.slice.apply(arguments));
+Validator.Error = function (message) {
+  this.message = message;
 };
 
 Validator.Error.prototype   = new Error('Validation failed');
