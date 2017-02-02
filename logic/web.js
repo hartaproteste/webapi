@@ -2,12 +2,14 @@
 
 function _notAllowed(req, res) { res.send(new Response.MethodNotAllowed()); }
 
-function _noCache(req, res) {
+function _noCache(req, res, next) {
   res.set({
     'Cache-Control' : 'no-cache, no-store, must-revalidate',
     'Pragma'        : 'no-cache',
     'Expires'       : 0
   });
+
+  next();
 }
 
 module.exports = function (api) {
