@@ -20,7 +20,9 @@ var api = require('express')();
 api.use(function (req, res, next) { req.now = new Date().getTime() / 1000; next(); });
 api.use(require('body-parser').json());
 api.use(require('./logic/response'));
-api.use(require('./logic/web'));
+
+require('./logic/web')(api);
+
 api.use(function (req, res) { res.send(new Response.NotFound()); });
 
 // Error handling
