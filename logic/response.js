@@ -107,6 +107,8 @@ module.exports = function middleware(req, res, next) {
   var _send = res.send;
 
   res.send = function (body) {
+    console.log('debug', body);
+
     if (body instanceof Response) {
       this.status(body.code);
       this.set(body.headers);
@@ -117,13 +119,16 @@ module.exports = function middleware(req, res, next) {
             return _send.call(this);  
           }
         }
-
+        
+        console.log('A');
         return _send.call(this, body.body);
       }
       
+      console.log('B');
       return _send.call(this);  
     }
-
+    
+    console.log('C');
     return _send.apply(this, arguments);
   }
 
