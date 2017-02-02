@@ -1,4 +1,4 @@
-﻿var valid = require('./valid);
+﻿var valid = require('./valid');
 
 function _notAllowed(req, res) { res.send(new Response.MethodNotAllowed()); }
 
