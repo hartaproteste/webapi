@@ -38,9 +38,9 @@ api.use(function (err, req, res, next) {
   res.send(response);
 });
 
-require('http').createServer(api).listen(config.listen.public.port, config.listen.public.ip, function (err) {
+require('http').createServer(api).listen(config.listen.port, config.listen.ip, function (err) {
   if (err) {
-    console.error(new Date().toISOString(), 'FATAL', 'Failed starting on ' + config.listen.public.ip + ':' + config.listen.public.port, err);
+    console.error(new Date().toISOString(), 'FATAL', 'Failed starting on ' + config.listen.ip + ':' + config.listen.port, err);
 
     process.exit(-2);
   } else {
