@@ -33,7 +33,7 @@ module.exports = function (api) {
   
   api.post('/', _noCache, function (req, res, next) {
     Promise.try(function () {
-      req.body = _.pick(req.body, (v) => (!_.isEmpty(v) && !_.isFinite(v)));
+      req.body = _.pick(req.body, (v) => (!_.isEmpty(v) || _.isFinite(v)));
 
       valid(req.body, {
         uid       : 'required',
