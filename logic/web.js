@@ -43,7 +43,7 @@ module.exports = function (api) {
         prec : 'numeric'
       });
     }).then(function () {
-      res.send(new Response.OK({ id: '0', lat: 44.452714, long: 26.085903, size: 250 }));
+      res.send(new Response.OK({ id: '0', lat: 44.452714, lon: 26.085903, size: 250 }));
     }).catch(valid.Error, function (e) {
       throw new Response.BadRequest(_.values(_.values(e.errors)[0])[0][0]);
     }).catch(function (err) {
