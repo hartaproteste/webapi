@@ -10,7 +10,7 @@ module.exports = function (api) {
     Promise.try(function () {
       req.body = _.pick(req.body, _.negate(_.isEmpty));
 
-      utils.valid(req.body, {
+      valid(req.body, {
         uid       : 'required',
         ts        : 'required|numeric',
         lat       : 'required|numeric|minVal:-90|maxVal:90',
