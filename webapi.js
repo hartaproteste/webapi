@@ -18,6 +18,7 @@ var api = require('express')();
 api.use(require('./logic/response'));
 api.use(function (req, res, next) { req.now = new Date().getTime() / 1000; next(); });
 api.use(require('body-parser').json());
+api.use(function (err, req, res, next) { if (err instanceof SyntaxError) { return next(new Response.BadRequest(err.message)); } next(err); });
 
 require('./logic/web')(api);
 
