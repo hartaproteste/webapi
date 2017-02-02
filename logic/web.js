@@ -5,7 +5,7 @@ function _notAllowed(req, res) { res.send(new Response.MethodNotAllowed()); }
 module.exports = function (api) {
   api.get ('/', _notAllowed);
   
-  api.post('/', function (req, res) {
+  api.post('/', function (req, res, next) {
     
     Promise.try(function () {
       req.body = _.pick(req.body, _.negate(_.isEmpty));
