@@ -10,9 +10,10 @@
   },
 
   "dependencies": {
-    "bluebird"   : "*",
-    "express"    : "*",
-    "pg"         : "*",
-    "underscore" : "*"
+    "bluebird"    : "*",
+    "body-parser" : "*",
+    "express"     : "*",
+    "pg"          : "*",
+    "underscore"  : "*"
   }
 }
