@@ -9,9 +9,18 @@ global._       = require('underscore');
 
 global.config = require('./config.json');
 
+config['pg'].host = config['pg'].host || process.env.PGHOST;
+config['pg'].port = config['pg'].port || process.env.PGPORT;
+
+config['pg'].database = config['pg'].database || process.env.PGDATABASE;
+config['pg'].user     = config['pg'].user     || process.env.PGUSER;
+config['pg'].password = config['pg'].password || process.env.PGPASSWORD;
+
 if (config.debug) {
   Promise.longStackTraces();
 }
+
+global.db = Promise.promisifyAll(new require('pg').Pool(config.pg));
 
 var api = require('express')();
 
