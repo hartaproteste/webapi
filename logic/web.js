@@ -52,7 +52,7 @@ module.exports = function (api) {
             req.body['msg'] || null
           ]);
 
-      return db.query(['INSERT INTO "protests"."members"("received", "uid", "ts", "position", "precision", "note")',
+      return db.query(['INSERT INTO "protest"."members"("received", "uid", "ts", "position", "precision", "note")',
           'VALUES (',
             'to_timestamp($1) AT TIME ZONE \'UTC\',',
             '$2,',
