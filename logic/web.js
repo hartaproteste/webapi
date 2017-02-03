@@ -43,7 +43,23 @@ module.exports = function (api) {
         prec : 'numeric'
       });
 
-      return db.query('SELECT COUNT(*) FROM protests.members');
+      return db.query(['INSERT INTO "protests.members"("received", "uid", "ts", "position", "precision", "note")',
+          'VALUES (',
+            'to_timestamp($1) AT TIME ZONE \'UTC\',',
+            '$2,',
+            'to_timestamp($3) AT TIME ZONE \'UTC\',',
+            '$4,',
+            'topology.ST_GeomFromText(\'POINT($5, $6)\'),',
+            '$7',
+          ') RETURNING *'].join(' '), [
+            req.now,
+            req.body['uid'],
+            req.body['ts'],
+            req.body['lat'], req.body['lon'],
+            req.body['prec'],
+            req.body['msg']
+          ]
+        );
     }).then(function (result) {
       console.log(result);
     }).then(function () {
