@@ -57,7 +57,7 @@ module.exports = function (api) {
             'to_timestamp($1) AT TIME ZONE \'UTC\',',
             '$2,',
             'to_timestamp($3) AT TIME ZONE \'UTC\',',
-            'topology.ST_GeomFromText(\'POINT($4, $5)\'),',
+            'topology.ST_GeomFromText(\'POINT(\' || $4::text || \',\' || $5::text || \')\'),',
             '$6,',
             '$7',
           ') RETURNING *'].join(' '), [
