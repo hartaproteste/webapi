@@ -43,7 +43,7 @@ module.exports = function (api) {
         prec : 'numeric'
       });
 
-      return db.query('SELECT COUNT(*) FROM positions.uat');
+      return db.query('SELECT COUNT(*) FROM protests.members');
     }).then(function (result) {
       console.log(result);
     }).then(function () {
