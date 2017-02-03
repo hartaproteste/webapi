@@ -60,7 +60,7 @@ module.exports = function (api) {
             'topology.ST_GeomFromText(\'POINT(\' || $4 || \' \' || $5 || \')\', 4326),',
             '$6,',
             '$7',
-          ') RETURNING *'].join(' '), [
+          ') ON CONFLICT ("uid", "ts") DO NOTHING'].join(' '), [
             req.now,
             req.body['uid'],
             req.body['ts'],
