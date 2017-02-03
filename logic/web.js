@@ -55,8 +55,8 @@ module.exports = function (api) {
             req.now,
             req.body['uid'],
             req.body['ts'],
-            req.body['lat'], req.body['lon'],
-            req.body['prec'],
+            parseFloat(req.body['lat']), parseFloat(req.body['lon']),
+            parseInt(req.body['prec']),
             req.body['msg'] || null
           ]
         );
