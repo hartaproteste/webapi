@@ -57,7 +57,7 @@ module.exports = function (api) {
             req.body['ts'],
             req.body['lat'], req.body['lon'],
             req.body['prec'],
-            req.body['msg']
+            req.body['msg'] || null
           ]
         );
     }).then(function (result) {
