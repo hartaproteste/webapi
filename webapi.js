@@ -20,7 +20,7 @@ if (config.debug) {
   Promise.longStackTraces();
 }
 
-global.db = Promise.promisifyAll(new require('pg').Pool(config.pg));
+global.db = new require('pg').Pool(config.pg);
 
 var api = require('express')();
 
