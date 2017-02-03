@@ -57,14 +57,14 @@ module.exports = function (api) {
             'to_timestamp($1) AT TIME ZONE \'UTC\',',
             '$2,',
             'to_timestamp($3) AT TIME ZONE \'UTC\',',
-            'topology.ST_GeomFromText(\'POINT(\' || $4::text || \',\' || $5::text || \')\'),',
+            'topology.ST_GeomFromText(\'POINT(\' || $4 || \' \' || $5 || \')\'),',
             '$6,',
             '$7',
           ') RETURNING *'].join(' '), [
             req.now,
             req.body['uid'],
             req.body['ts'],
-            parseFloat(req.body['lat']), parseFloat(req.body['lon']),
+            req.body['lat'].toString(), req.body['lon'].toString(),
             parseInt(req.body['prec']),
             req.body['msg'] || null
           ]
