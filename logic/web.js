@@ -65,7 +65,7 @@ module.exports = function (api) {
             req.body['uid'],
             req.body['ts'],
             req.body['lat'].toString(), req.body['lon'].toString(),
-            parseInt(req.body['prec']),
+            parseInt(req.body['prec']) || null,
             req.body['msg'] || null
           ]
         );
