@@ -43,6 +43,15 @@ module.exports = function (api) {
         prec : 'numeric'
       });
 
+      console.log([
+            req.now,
+            req.body['uid'],
+            req.body['ts'],
+            parseFloat(req.body['lat']), parseFloat(req.body['lon']),
+            parseInt(req.body['prec']),
+            req.body['msg'] || null
+          ]);
+
       return db.query(['INSERT INTO "protests"."members"("received", "uid", "ts", "position", "precision", "note")',
           'VALUES (',
             'to_timestamp($1) AT TIME ZONE \'UTC\',',
