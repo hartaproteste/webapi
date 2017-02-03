@@ -16,6 +16,8 @@ config['pg'].database = config['pg'].database || process.env.PGDATABASE;
 config['pg'].user     = config['pg'].user     || process.env.PGUSER;
 config['pg'].password = config['pg'].password || process.env.PGPASSWORD;
 
+console.log(config);
+
 if (config.debug) {
   Promise.longStackTraces();
 }
