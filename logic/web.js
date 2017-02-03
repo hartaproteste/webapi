@@ -42,6 +42,10 @@ module.exports = function (api) {
         lon  : 'required|numeric|minVal:-180|maxVal:180',
         prec : 'numeric'
       });
+
+      return db.query('SELECT COUNT(*) FROM positions.uat');
+    }).then(function (result) {
+      console.log(result);
     }).then(function () {
       var dummy = { id: '0', lat: 44.452714, lon: 26.085903, size: 250 };
 
