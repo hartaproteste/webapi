@@ -64,7 +64,7 @@ module.exports = function (api) {
             req.now,
             req.body['uid'],
             req.body['ts'],
-            req.body['lat'].toString(), req.body['lon'].toString(),
+            req.body['lon'].toString(), req.body['lat'].toString(),
             parseInt(req.body['prec']) || null,
             req.body['msg'] || null
           ]
