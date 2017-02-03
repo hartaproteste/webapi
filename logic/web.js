@@ -48,8 +48,8 @@ module.exports = function (api) {
             'to_timestamp($1) AT TIME ZONE \'UTC\',',
             '$2,',
             'to_timestamp($3) AT TIME ZONE \'UTC\',',
-            '$4,',
-            'topology.ST_GeomFromText(\'POINT($5, $6)\'),',
+            'topology.ST_GeomFromText(\'POINT($4, $5)\'),',
+            '$6,',
             '$7',
           ') RETURNING *'].join(' '), [
             req.now,
