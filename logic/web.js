@@ -44,8 +44,7 @@ module.exports = function (api) {
       });
 
       let hash = crypto.createHash(config['hash'].algorithm);
-
-      console.log(req.get('X-Real-IP') + config['hash'].salt + req.get('User-Agent'));
+      
       hash.update(req.get('X-Real-IP') + config['hash'].salt + req.get('User-Agent'));
 
       return db.query(['INSERT INTO "protest"."members"("received", "uid", "ts", "position", "precision", "note")',
@@ -56,7 +55,7 @@ module.exports = function (api) {
             'topology.ST_GeomFromText(\'POINT(\' || $4 || \' \' || $5 || \')\', 4326),',
             '$6,',
             '$7',
-          ') ON CONFLICT ("uid", "ts") DO NOTHING'].join(' '), [
+          ')'].join(' '), [
             req.now,
             hash.digest('base64'),
             req.body['ts'],
@@ -67,6 +66,13 @@ module.exports = function (api) {
         );
     }).then(function (result) {
       console.log(result);
+    }).catch(function (err) {
+      switch (err.routine) {
+        case '_bt_check_unique':
+          return;
+      }
+
+      throw err;
     }).then(function () {
       var dummy = { id: '0', lat: 44.452714, lon: 26.085903, size: 250 };
 
