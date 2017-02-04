@@ -85,13 +85,14 @@ module.exports = function (api) {
             'SELECT f.type, f.name, f.extra, (',
                 'SELECT COUNT(DISTINCT t."uid") FROM "protest"."members" t WHERE t."fixed" = m."fixed"',
                 'AND date_trunc(\'minute\'::text, t."ts") >= date_trunc(\'minute\'::text, to_timestamp($1) AT TIME ZONE \'UTC\')',
+                'AND date_trunc(\'minute\'::text, t."ts") <= date_trunc(\'minute\'::text, to_timestamp($2) AT TIME ZONE \'UTC\')',
               ') AS "total"',
-            'FROM "protest"."members" m, "position"."fixed" f WHERE m.fixed = f.id AND m."uid" = $2',
-            'AND date_trunc(\'minute\'::text, m."ts") = date_trunc(\'minute\'::text, to_timestamp($3) AT TIME ZONE \'UTC\')'
+            'FROM "protest"."members" m, "position"."fixed" f WHERE m.fixed = f.id AND m."uid" = $3',
+            'AND date_trunc(\'minute\'::text, m."ts") = date_trunc(\'minute\'::text, to_timestamp($2) AT TIME ZONE \'UTC\')'
           ].join(' '), [
-            req.body['ts'] - 900,
-            key,
-            req.body['ts']
+            req.body['ts'] - config['trail'],
+            req.body['ts'],
+            key
           ]
         );
     }).then(function (result) {
