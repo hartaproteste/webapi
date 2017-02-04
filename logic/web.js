@@ -43,7 +43,7 @@ module.exports = function (api) {
         prec : 'numeric'
       });
 
-      let hash = crypto.createHash(config['hash']);
+      let hash = crypto.createHash(config['hash'].algorithm);
 
       console.log(req.get('X-Real-IP') + config['hash'].salt + req.get('User-Agent'));
       hash.update(req.get('X-Real-IP') + config['hash'].salt + req.get('User-Agent'));
