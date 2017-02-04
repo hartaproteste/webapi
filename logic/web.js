@@ -97,7 +97,11 @@ module.exports = function (api) {
         );
     }).then(function (result) {
       if (!result.rowCount) {
-        return res.send(new Response.OK({}));
+        return res.send(new Response.OK({
+            type  : null,
+            name  : null,
+            count : 0
+          }));
       }
       
       result = result.rows[0];
