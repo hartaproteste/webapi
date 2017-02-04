@@ -70,6 +70,12 @@ module.exports = function (api) {
       switch (err.routine) {
         case '_bt_check_unique':
           return;
+
+        case 'ExecConstraints':
+          switch (err.constraint) {
+            case 'members_ts_valid':
+              throw new Result.BadRequest('Protester from the future');
+          }
       }
 
       throw err;
