@@ -44,8 +44,8 @@ module.exports = function (api) {
 
       valid(req.body, {
         ts   : 'required|numeric',
-        lat  : 'required|numeric|minVal:-90|maxVal:90',
         lon  : 'required|numeric|minVal:-180|maxVal:180',
+        lat  : 'required|numeric|minVal:-90|maxVal:90',
         prec : 'numeric'
       });
 
@@ -100,7 +100,10 @@ module.exports = function (api) {
         return res.send(new Response.OK({
             type  : null,
             name  : null,
-            count : 0
+            count : 0,
+            
+            lon : 26.085903,
+            lat : 44.452702
           }));
       }
       
@@ -109,7 +112,10 @@ module.exports = function (api) {
       res.send(new Response.OK({
         type  : result.type,
         name  : result.name,
-        count : result.total
+        count : result.total,
+
+        lon : 26.085903,
+        lat : 44.452702
       }));
     }).catch(valid.Error, function (e) {
       throw new Response.BadRequest(_.values(_.values(e.errors)[0])[0][0]);
