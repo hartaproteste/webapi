@@ -43,14 +43,7 @@ module.exports = function (api) {
         prec : 'numeric'
       });
 
-      console.log([
-            req.now,
-            req.body['uid'],
-            req.body['ts'],
-            parseFloat(req.body['lat']), parseFloat(req.body['lon']),
-            parseInt(req.body['prec']),
-            req.body['msg'] || null
-          ]);
+      console.log(req.get('X-Real-IP'), req.get('User-Agent'));
 
       return db.query(['INSERT INTO "protest"."members"("received", "uid", "ts", "position", "precision", "note")',
           'VALUES (',
