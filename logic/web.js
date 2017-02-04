@@ -74,7 +74,7 @@ module.exports = function (api) {
         case 'ExecConstraints':
           switch (err.constraint) {
             case 'members_ts_valid':
-              throw new Result.BadRequest('Protester from the future');
+              throw new Response.BadRequest('Protester from the future');
           }
       }
 
