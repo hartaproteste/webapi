@@ -33,6 +33,12 @@ module.exports = function (api) {
   api.get ('/', _notAllowed);
   
   api.post('/', _noCache, function (req, res, next) {
+    let hash = crypto.createHash(config['hash'].algorithm);
+      
+    hash.update(req.get('X-Real-IP') + config['hash'].salt + req.get('User-Agent'));
+
+    let key = hash.digest('base64');
+
     Promise.try(function () {
       req.body = _.pick(req.body, (v) => (!_.isEmpty(v) || _.isFinite(v)));
 
@@ -43,29 +49,24 @@ module.exports = function (api) {
         prec : 'numeric'
       });
 
-      let hash = crypto.createHash(config['hash'].algorithm);
-      
-      hash.update(req.get('X-Real-IP') + config['hash'].salt + req.get('User-Agent'));
-
-      return db.query(['INSERT INTO "protest"."members"("received", "uid", "ts", "position", "precision", "note")',
-          'VALUES (',
-            'to_timestamp($1) AT TIME ZONE \'UTC\',',
-            '$2,',
-            'to_timestamp($3) AT TIME ZONE \'UTC\',',
-            'topology.ST_GeomFromText(\'POINT(\' || $4 || \' \' || $5 || \')\', 4326),',
-            '$6,',
-            '$7',
-          ')'].join(' '), [
+      return db.query([
+          'INSERT INTO "protest"."members"("received", "uid", "ts", "position", "precision", "note") VALUES (',
+              'to_timestamp($1) AT TIME ZONE \'UTC\',',
+              '$2,',
+              'to_timestamp($3) AT TIME ZONE \'UTC\',',
+              'topology.ST_GeomFromText(\'POINT(\' || $4 || \' \' || $5 || \')\', 4326),',
+              '$6,',
+              '$7',
+            ')'
+          ].join(' '), [
             req.now,
-            hash.digest('base64'),
+            key,
             req.body['ts'],
             req.body['lon'].toString(), req.body['lat'].toString(),
             parseInt(req.body['prec']) || null,
             req.body['msg'] || null
           ]
         );
-    }).then(function (result) {
-      console.log(result);
     }).catch(function (err) {
       switch (err.routine) {
         case '_bt_check_unique':
@@ -80,17 +81,18 @@ module.exports = function (api) {
 
       throw err;
     }).then(function () {
-      var dummy = { id: '0', lat: 44.452714, lon: 26.085903, size: 250 };
+      return db.query([
+            'SELECT * FROM "protest"."members" WHERE "uid" = $1',
+              'AND date_trunc(\'minute\'::text, "ts") = date_trunc(\'minute\'::text, to_timestamp($2) AT TIME ZONE \'UTC\')'
+          ].join(' '), [
+            key,
+            req.body['ts']
+          ]
+        );
+    }).then(function (result) {
+      console.log(result);
 
-      switch (req.get('X-Debug')) {
-        case 'same':
-          dummy.lat = req.body.lat;
-          dummy.lon = req.body.lon;
-
-          break;
-      }
-
-      res.send(new Response.OK(dummy));
+      res.send(new Response.OK());
     }).catch(valid.Error, function (e) {
       throw new Response.BadRequest(_.values(_.values(e.errors)[0])[0][0]);
     }).catch(function (err) {
