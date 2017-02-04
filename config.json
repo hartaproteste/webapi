@@ -1,6 +1,10 @@
 ﻿{
   "debug" : true,
 
+  "hash": {
+    "algorithm" : "SHA-256"
+  },
+
   "listen": {
     "ip"   : "127.0.0.1",
     "port" : 1989

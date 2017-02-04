@@ -1,4 +1,5 @@
-﻿var valid = require('./valid');
+﻿var crypto = require('crypto')
+  , valid  = require('./valid');
 
 function _notAllowed(req, res) { res.send(new Response.MethodNotAllowed()); }
 
@@ -36,14 +37,16 @@ module.exports = function (api) {
       req.body = _.pick(req.body, (v) => (!_.isEmpty(v) || _.isFinite(v)));
 
       valid(req.body, {
-        uid  : 'required',
         ts   : 'required|numeric',
         lat  : 'required|numeric|minVal:-90|maxVal:90',
         lon  : 'required|numeric|minVal:-180|maxVal:180',
         prec : 'numeric'
       });
 
-      console.log(req.get('X-Real-IP'), req.get('User-Agent'));
+      let hash = crypto.createHash(config['hash']);
+
+      console.log(req.get('X-Real-IP') + config['hash'].salt + req.get('User-Agent'));
+      hash.update(req.get('X-Real-IP') + config['hash'].salt + req.get('User-Agent'));
 
       return db.query(['INSERT INTO "protest"."members"("received", "uid", "ts", "position", "precision", "note")',
           'VALUES (',
@@ -55,7 +58,7 @@ module.exports = function (api) {
             '$7',
           ') ON CONFLICT ("uid", "ts") DO NOTHING'].join(' '), [
             req.now,
-            req.body['uid'],
+            hash.digest('base64'),
             req.body['ts'],
             req.body['lon'].toString(), req.body['lat'].toString(),
             parseInt(req.body['prec']) || null,
