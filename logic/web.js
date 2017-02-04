@@ -35,7 +35,7 @@ module.exports = function (api) {
   api.post('/', _noCache, function (req, res, next) {
     let hash = crypto.createHash(config['hash'].algorithm);
       
-    hash.update(req.get('X-Real-IP') + config['hash'].salt + req.get('User-Agent'));
+    hash.update(req.get('X-Real-IP') + config['hash'].salt + (req.get('User-Agent') || ''));
 
     let key = hash.digest('base64');
 
