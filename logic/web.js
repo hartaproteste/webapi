@@ -82,9 +82,9 @@ module.exports = function (api) {
       throw err;
     }).then(function () {
       return db.query([
-            'SELECT f.*, COUNT(',
-                'SELECT o."fixed" FROM "protest"."members" o WHERE o."fixed" = m."fixed"',
-                'AND date_trunc(\'minute\'::text, o."ts") = date_trunc(\'minute\'::text, to_timestamp($1) AT TIME ZONE \'UTC\')',
+            'SELECT f.*, (',
+                'SELECT COUNT(*) FROM "protest"."members" t WHERE t."fixed" = m."fixed"',
+                'AND date_trunc(\'minute\'::text, t."ts") = date_trunc(\'minute\'::text, to_timestamp($1) AT TIME ZONE \'UTC\')',
               ') AS "total"',
             'FROM "protest"."members" m, "position"."fixed" f WHERE m.fixed = f.id AND m."uid" = $2',
             'AND date_trunc(\'minute\'::text, m."ts") = date_trunc(\'minute\'::text, to_timestamp($3) AT TIME ZONE \'UTC\')'
