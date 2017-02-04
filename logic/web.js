@@ -82,8 +82,8 @@ module.exports = function (api) {
       throw err;
     }).then(function () {
       return db.query([
-            'SELECT f.*, (',
-                'SELECT COUNT(*) FROM "protest"."members" t WHERE t."fixed" = m."fixed"',
+            'SELECT f.type, f.name, f.extra, (',
+                'SELECT COUNT(DISTINCT t."uid") FROM "protest"."members" t WHERE t."fixed" = m."fixed"',
                 'AND date_trunc(\'minute\'::text, t."ts") = date_trunc(\'minute\'::text, to_timestamp($1) AT TIME ZONE \'UTC\')',
               ') AS "total"',
             'FROM "protest"."members" m, "position"."fixed" f WHERE m.fixed = f.id AND m."uid" = $2',
@@ -95,9 +95,17 @@ module.exports = function (api) {
           ]
         );
     }).then(function (result) {
-      console.log(result);
+      if (!result.rowCount) {
+        return res.send(new Response.OK({}));
+      }
+      
+      result = result.rows[0];
 
-      res.send(new Response.OK());
+      res.send(new Response.OK({
+        type  : result.type,
+        name  : result.name,
+        count : result.total
+      }));
     }).catch(valid.Error, function (e) {
       throw new Response.BadRequest(_.values(_.values(e.errors)[0])[0][0]);
     }).catch(function (err) {
